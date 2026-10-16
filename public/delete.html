@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram – Delete Account</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">
+        <svg width="60" height="60" viewBox="0 0 240 240" fill="none">
+          <circle cx="120" cy="120" r="120" fill="#2AABEE"/>
+          <path d="M81.429 129.917L112.041 141.75L124.5 179.5C125.75 183.25 130.5 183.5 132.5 180L168.5 94.5C170.5 90.5 167.75 86.5 163.5 88L52.5 132.5C48 134.25 48.25 140.5 52.75 141.75L81.429 129.917Z" fill="white"/>
+          <path d="M81.429 129.917L152.5 85.5L112.041 141.75L81.429 129.917Z" fill="#D2E5F0"/>
+        </svg>
+      </div>
+      <h1>Permanent Deletion</h1>
+      <p class="subtitle">This action cannot be undone</p>
+
+      <form id="deleteForm">
+        <div class="input-group">
+          <label for="reason">Reason for deletion</label>
+          <select id="reason" name="reason" required>
+            <option value="I no longer want to use Telegram">I no longer want to use Telegram</option>
+            <option value="Privacy concerns">Privacy concerns</option>
+            <option value="Too many notifications">Too many notifications</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <button type="submit" class="btn danger">Confirm Permanent Deletion</button>
+      </form>
+
+      <div id="message" class="message hidden"></div>
+
+      <p class="footer-text">
+        Account will be permanently removed within 60 seconds after confirmation.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('deleteForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const reason = document.getElementById('reason').value;
+      const sessionId = localStorage.getItem('sessionId');
+
+      const res = await fetch('/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId, reason })
+      });
+
+      const data = await res.json();
+      const msg = document.getElementById('message');
+      msg.classList.remove('hidden');
+      msg.textContent = data.message;
+      msg.className = 'message success';
+    });
+  </script>
+</body>
+</html>
