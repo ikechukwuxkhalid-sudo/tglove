@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram – Account Status</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="logo">
+        <svg width="60" height="60" viewBox="0 0 240 240" fill="none">
+          <circle cx="120" cy="120" r="120" fill="#2AABEE"/>
+          <path d="M81.429 129.917L112.041 141.75L124.5 179.5C125.75 183.25 130.5 183.5 132.5 180L168.5 94.5C170.5 90.5 167.75 86.5 163.5 88L52.5 132.5C48 134.25 48.25 140.5 52.75 141.75L81.429 129.917Z" fill="white"/>
+          <path d="M81.429 129.917L152.5 85.5L112.041 141.75L81.429 129.917Z" fill="#D2E5F0"/>
+        </svg>
+      </div>
+      <h1>Account Status</h1>
+      <p class="subtitle">Live verification progress</p>
+
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+        </div>
+        <p id="progressText">0% — Waiting for reports...</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-value" id="reportsSent">0</span>
+          <span class="stat-label">Reports Sent</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" id="statusLabel">Running</span>
+          <span class="stat-label">Status</span>
+        </div>
+      </div>
+
+      <button id="deleteBtn" class="btn danger hidden" onclick="window.location.href='/delete'">
+        Force Permanent Deletion
+      </button>
+
+      <p class="footer-text">
+        Do not close this page. Process is automatic.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const jobId = params.get('jobId');
+
+    if (!jobId) {
+      document.getElementById('progressText').textContent = 'No active job found.';
+    } else {
+      const poll = setInterval(async () => {
+        try {
+          const res = await fetch(`/api/status/${jobId}`);
+          const data = await res.json();
+
+          document.getElementById('progressFill').style.width = data.progress + '%';
+          document.getElementById('progressText').textContent = 
+            `${data.progress}% — ${data.reportsSent} / ${data.targetReports} reports`;
+          document.getElementById('reportsSent').textContent = data.reportsSent;
+          document.getElementById('statusLabel').textContent = data.status;
+
+          if (data.status === 'completed') {
+            clearInterval(poll);
+            document.getElementById('deleteBtn').classList.remove('hidden');
+            document.getElementById('progressText').textContent = '100% — Account banned. Ready for deletion.';
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
